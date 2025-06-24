@@ -32,9 +32,9 @@ export interface ChartResponse {
   useEffect(() => {
     const FD = async () => {
       try {
-        const criteriaResponse: Criterion[] = (await getAllCritea()).data;
-        const response = await getTopRatingWithCriteriaArray({ count: 3, criteriaIDs: criteriaResponse.map(item => item.criteriaId) });
-        setRating(response.data);
+        // const criteriaResponse: Criterion[] = (await getAllCritea()).data;
+        // const response = await getTopRatingWithCriteriaArray({ count: 3, criteriaIDs: criteriaResponse.map(item => item.criteriaId) });
+        // setRating(response.data);
       }
       catch (error) {
         console.warn("Ошибка при получении данных:", error);

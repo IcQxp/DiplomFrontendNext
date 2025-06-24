@@ -8,7 +8,7 @@ axios.interceptors.request.use(config => {
 });
 
 
-const axiosRequest = async (method: 'get' | 'post' | 'put' | 'delete', url: string, token?: string, data?: any) => {
+async function axiosRequest(method: 'get' | 'post' | 'put' | 'delete', url: string, token?: string, data?: any)  {
   try {
     const headers = {
       // 'bypass-tunnel-reminder':'1',
@@ -24,7 +24,7 @@ const axiosRequest = async (method: 'get' | 'post' | 'put' | 'delete', url: stri
   }
 };
 
-const axiosDocumentRequest = async (method: 'get' | 'post' | 'put' | 'delete', url: string, token: string, formData: FormData) => {
+async function axiosDocumentRequest  (method: 'get' | 'post' | 'put' | 'delete', url: string, token: string, formData: FormData) {
   try {
     const headers = {
       // 'bypass-tunnel-reminder':'1',
