@@ -28,4 +28,5 @@ export const endpoints= {
     getAllStatuses: `${BASE_API}/api/documents/statuses`,
     getUserDocumentByID: (id:number) => `${BASE_API}/api/documents/doc/${id}`,
     updateDocumentStatus: (id:number) => `${BASE_API}/api/documents/update-status/${id}`,
+    postLogin: `${BASE_API}/api/auth/login`,
 }

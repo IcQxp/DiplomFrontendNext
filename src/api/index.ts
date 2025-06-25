@@ -1,6 +1,6 @@
 import axios from "axios";
 import { endpoints } from "./config";
-import { DocumentStatusUpdateModel, RatingWithCriteria } from "@/types";
+import { DocumentStatusUpdateModel, RatingWithCriteria, UserDataPaylod } from "@/types";
 
 axios.interceptors.request.use(config => {
   config.headers['bypass-tunnel-reminder'] = '1';
@@ -97,6 +97,8 @@ const getUserDocumentByID = (docId: number) =>
 const updateDocumentStatus = (documentId: number, model: DocumentStatusUpdateModel) =>
   axiosRequest("put", endpoints.updateDocumentStatus(documentId), "", model);
 
+const postLogin = (data:UserDataPaylod) => axiosRequest('post',endpoints.postLogin,'',data);
+
 export {
   getUserDocuments,
   getMe,
@@ -122,4 +124,5 @@ export {
   getUserDocumentByID,
   updateDocumentStatus,
   getUserSrBallById,
+  postLogin
 }
