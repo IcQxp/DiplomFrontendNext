@@ -8,10 +8,10 @@ export interface DocumentStatusUpdateModel {
   Score?: number | null; // Оценка документа (может быть null)
 }
 
-export interface Criterion {
-    criteriaId: Id;
-    name: Name;
-    description: Description;
-    maxScore: number;
-    documents?: Document[]; // Если нужно
-}
+// export interface Criterion {
+//     criteriaId: Id;
+//     name: Name;
+//     description: Description;
+//     maxScore: number;
+//     documents?: Document[]; // Если нужно
+// }

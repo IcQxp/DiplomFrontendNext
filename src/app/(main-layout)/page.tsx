@@ -3,13 +3,14 @@
 
 import { useEffect, useState } from "react";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel, Typography, Card, CardContent, Link } from "@mui/material";
-import styles from "./RatingPage.module.scss";
+import styles from "./page.module.scss";
 import { ResponsiveBar } from "@nivo/bar";
 import { ResponsiveRadar } from "@nivo/radar";
 // import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useRouter } from "next/navigation";
 import { LibraryBooks, ModeEdit } from "@mui/icons-material";
 import { getAllCritea, getTopRatingWithCriteriaArray } from "@/api";
+import { Criterion } from "@/types";
 
 export function convert(input: any): any {
     const { keys, data } = input;
@@ -42,10 +43,10 @@ export function convert(input: any): any {
     return result;
 }
 
-interface Criterion {
-  criteriaId: number;
-  name: string;
-}
+// interface Criterion {
+//   criteriaId: number;
+//   name: string;
+// }
 
 interface RatingResponse {
   data: any[];

@@ -1,125 +1,92 @@
 'use client'
+
 import { useEffect, useState } from "react";
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel, Typography, Card, CardContent, Link } from "@mui/material";
-import styles from "./RatingPage.module.scss";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel, Typography, Card, CardContent, Link, SelectChangeEvent } from "@mui/material";
+import styles from './RatingPage.module.scss';
 import { ResponsiveBar } from "@nivo/bar";
 import { ResponsiveRadar } from "@nivo/radar";
-// import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useRouter } from "next/navigation";
 import { LibraryBooks, ModeEdit } from "@mui/icons-material";
 import { getAllCritea, getTopRatingWithCriteriaArray } from "@/api";
+import { criterias, default_api_mocks } from "@/api/mocks";
+import { Criterion, DataEntry, KeyEntry, NivoDefaultData, RatingResponse } from "@/types";
+import { useDispatch } from "react-redux";
+import { setRating as setRatingRedux } from "@/store/ratingSlice";
 
-const moki = {data:[
-  {
-    "criteria": "fruity",
-    "chardonay": 87,
-    "carmenere": 51,
-    "syrah": 96
-  },
-  {
-    "criteria": "bitter",
-    "chardonay": 68,
-    "carmenere": 104,
-    "syrah": 57
-  },
-  {
-    "criteria": "heavy",
-    "chardonay": 92,
-    "carmenere": 53,
-    "syrah": 25
-  },
-  {
-    "criteria": "strong",
-    "chardonay": 116,
-    "carmenere": 109,
-    "syrah": 103
-  },
-  {
-    "criteria": "sunny",
-    "chardonay": 67,
-    "carmenere": 81,
-    "syrah": 46
-  }
-],keys:['chardonay', 'carmenere', 'syrah']
+/**
+ * Поворачивает значение с ключами 
+ * @param {NivoDefaultData} input 
+ * @returns {NivoDefaultData} Повернутая дата 
+ * @example 
+ * data: [{ criteria: 'Крутой', 'Первый': 5, 'Второй': 0}, { criteria: 'Классный', 'Первый': 1,  'Второй': 2}],
+  keys: ['Первый', 'Второй']
+  =>
+  data: [{ criteria: 'Первый', 'Крутой': 5, 'Классный': 1}, { criteria: 'Второй', 'Крутой': 0, 'Классный': 2}]
+  keys: ['Крутой', 'Классный'] 
+ */
+function convert(input: NivoDefaultData): NivoDefaultData {
+  const { keys: studentNames, data: criteriaData } = input;
+  // Извлекаем названия критериев из исходного массива data
+  const criteriaKeys: string[] = criteriaData.map((item) => item.criteria);
 
-}
-
-function convert(input: any): any {
-    const { keys, data } = input;
-
-    // 1. Создаем массив ключей (критериев)
-    const criteriaKeys = data.map((item: any) => item.criteria);
-
-    // 2. Преобразуем данные для каждого студента
-    const transformedData = keys.map((studentKey: string) => {
-        const studentData: any = {
-            criteria: studentKey // Ключ - это имя студента
-        };
-
-        // Для каждого критерия добавляем значение для текущего студента
-        data.forEach((criteriaItem: any) => {
-            const criterion = criteriaItem.criteria;
-            const value = criteriaItem[studentKey];
-            studentData[criterion] = value;
-        });
-
-        return studentData;
-    });
-
-    // 3. Формируем итоговый объект
-    const result = {
-        keys: criteriaKeys,
-        data: transformedData
+  // Преобразуем данные: для каждого студента собираем его значения по всем критериям
+  const transformedData: DataEntry[] = studentNames.map((studentName) => {
+    const studentData: DataEntry = {
+      criteria: studentName,
     };
 
-    return result;
+    criteriaData.forEach((criteriaItem) => {
+      const criterion = criteriaItem.criteria;
+      const value = criteriaItem[studentName]; // получаем значение по имени студента
+
+      // Присваиваем значение критерия для студента
+      studentData[criterion] = value !== undefined ? value : 0; // можно не ставить 0, если нужно сохранять undefined
+    });
+
+    return studentData;
+  });
+
+  // Возвращаем результат в нужном формате
+  const result: NivoDefaultData = {
+    keys: criteriaKeys,
+    data: transformedData,
+  };
+
+  return result;
 }
 
-interface Criterion {
-  criteriaId: number;
-  name: string;
-}
-
-interface RatingResponse {
-  data: any[];
-  keys: string[];
-}
-
-export default  function RatingPage() {
-  // const location = useLocation();
-  const router = useRouter();
-  // if (location.pathname.toLowerCase() != "/rating" && location.pathname.toLowerCase() != "/rating/")
-  //   return <Outlet />;
-
-
+export default function RatingPage() {
   const [rating, setRating] = useState<RatingResponse | null>(null);
-  const [ratingBar, setRatingBar] = useState<RatingResponse | null>(null);
-  const [ratingRadar, setRatingRadar] = useState<RatingResponse | null>(null);
+  const [ratingBar, setRatingBar] = useState<NivoDefaultData | null>(null);
+  const [ratingRadar, setRatingRadar] = useState<NivoDefaultData | null>(null);
   const [criteria, setCriteria] = useState<Criterion[]>([]);
-  const [selectedCriteriaIds, setSelectedCriteriaIds] = useState<number[]>([]); // Массив ID выбранных критериев
+  const [selectedCriteriaIds, setSelectedCriteriaIds] = useState<number[]>([]);
   const [studentCount, setStudentCount] = useState<number>(5);
+  const router = useRouter();
+  const dispath = useDispatch();
 
-  
-  // const navigate = useNavigate();
   // Загрузка всех критериев при монтировании компонента
   useEffect(() => {
     const fetchCriteria = async () => {
       try {
-        setRatingBar(moki)
-setRating(moki)
-setRatingRadar(moki)
-        /* const criteriaResponse = await getAllCritea();
-         setCriteria(criteriaResponse.data);*/
-        handleUpdate();
+        const criteriaResponse = await getAllCritea();
+        setCriteria(criteriaResponse.data);
       } catch (error) {
+        setCriteria(criterias.data);
         console.error("Ошибка при загрузке критериев:", error);
+      } finally {
+        handleUpdate();
       }
     };
 
     fetchCriteria();
   }, []);
 
-  // Обработчик изменения состояния чекбокса
+  /**
+  * Добавление/Удаление критерия для запроса
+  * @param criterionId - ключ, необходимый для идентификации критериев
+  * @returns undefined
+  */
   const handleCheckboxChange = (criterionId: number) => {
     if (selectedCriteriaIds.includes(criterionId)) {
       setSelectedCriteriaIds(selectedCriteriaIds.filter((id) => id !== criterionId));
@@ -128,54 +95,68 @@ setRatingRadar(moki)
     }
   };
 
-  // Обработчик изменения количества студентов
-  const handleStudentCountChange = (event: any) => {
-    const count = parseInt(event.target.value, 10);
+  /**
+   * Обработчик изменения количества студентов
+   * @param {SelectChangeEvent<number>} event - Событие изменения значения в MUI Select
+   * @returns undefined
+   *  */
+  const handleStudentCountChange = (event: SelectChangeEvent<number>): void => {
+    const count = event.target.value as number;
     setStudentCount(count);
   };
 
+
   // Функция для обновления данных по нажатию кнопки
-  const handleUpdate = async () => {
+  const handleUpdate = async ():Promise<void> => {
+    const ratingResponse: { data: RatingResponse } = { data: default_api_mocks };
     try {
-      /* const ratingResponse = await getTopRatingWithCriteriaArray({
-         count: studentCount,
-         criteriaIDs: selectedCriteriaIds, // Передаём массив ID выбранных критериев
-       }); 
+      const response = await getTopRatingWithCriteriaArray({
+        count: studentCount, criteriaIDs: selectedCriteriaIds, // Передаём массив ID выбранных критериев
+      }) as { data: RatingResponse };
+      ratingResponse.data = response.data;
+    } catch (error) {
+      console.error("Ошибка при обновлении данных:", error);
+    } finally {
       setRating(ratingResponse.data);
+
       setRatingRadar({
         ...ratingResponse.data,
-        keys: ratingResponse.data.keys.map((keyObj: any) => Object.values(keyObj)[0]), // Преобразование keys
+        keys: ratingResponse.data.keys.map((keyObj: KeyEntry) => Object.values(keyObj)[0]),
       });
-
       setRatingBar(
         convert({
           ...ratingResponse.data,
-          keys: ratingResponse.data.keys.map((keyObj: any) => Object.values(keyObj)[0]), // Преобразование keys
+          keys: ratingResponse.data.keys.map((keyObj: KeyEntry) => Object.values(keyObj)[0]), // Преобразование keys
         })
       );
-      */
-    } catch (error) {
-      console.error("Ошибка при обновлении данных:", error);
     }
   };
-
 
   const calculateTotalScores = () => {
     if (!rating) return [];
 
-    const totalScores = rating.keys.map((keyObj) => {
+    const totalScoresC = rating.keys.map((keyObj) => {
       const studentName = Object.values(keyObj)[0];
-      const totalScore = rating.data.reduce((sum, item) => sum + (item[studentName] || 0), 0);
+      const totalScore = rating.data.reduce((sum, item) => sum + (Number(item[studentName]) || 0), 0);
       return {
         name: studentName,
         score: totalScore,
       };
     });
 
-    return totalScores.sort((a, b) => b.score - a.score); // Сортируем по убыванию баллов
+    return totalScoresC.sort((a, b) => b.score - a.score); // Сортируем по убыванию баллов
   };
 
   const totalScores = calculateTotalScores();
+
+  const handleReportClick = () => {
+    if (rating) {
+
+      dispath(setRatingRedux(rating)); // ✅ Сохраняем в Redux
+      router.push('/rating/report');
+    }
+  };
+
   return (
     <Box className={styles.page} sx={{ width: "100%", padding: "20px" }}>
       <Typography variant="h4" gutterBottom sx={{ color: "#000" }}>
@@ -252,8 +233,8 @@ setRatingRadar(moki)
               position: "relative", // Обеспечиваем правильное позиционирование
               overflow: "hidden", // Скрываем всё, что выходит за пределы контейнера
             }}
-            
-            >
+
+          >
 
             <ResponsiveRadar
               data={ratingRadar.data}
@@ -322,7 +303,7 @@ setRatingRadar(moki)
               height: "400px", // Фиксированная высота
               paddingBottom: "20px"
             }}
-            >
+          >
             <ResponsiveBar
               data={ratingBar.data}
               keys={ratingBar.keys}
@@ -394,7 +375,7 @@ setRatingRadar(moki)
                 //     }}
                 //   >
                 <Card
-                key={index}
+                  key={index}
                   sx={{
                     width: { xs: "100%", sm: "calc(50% - 10px)", md: "200px" }, // Полная ширина на мобильных, две в ряд на планшетах
                     boxShadow: 3,
@@ -427,9 +408,9 @@ setRatingRadar(moki)
       )}
       {rating && <Box sx={{ marginTop: "30px", display: "flex", gap: "15px", flexDirection: { xs: "column", sm: "row" } }} >
         <Button startIcon={<ModeEdit />} sx={{ fontSize: "min(3vw,14px)" }} variant="contained" size="medium"
-        onClick={() => router.push("/rating/report")}
+          onClick={handleReportClick}
         >
-        {/* <Button startIcon={<ModeEdit />} sx={{ fontSize: "min(3vw,14px)" }} variant="contained" size="medium" onClick={() => { navigate("/rating/report", { state: { rating: rating } }) }}> */}
+          {/* <Button startIcon={<ModeEdit />} sx={{ fontSize: "min(3vw,14px)" }} variant="contained" size="medium" onClick={() => { navigate("/rating/report", { state: { rating: rating } }) }}> */}
           Сформировать отчет
         </Button>
         <Button startIcon={<LibraryBooks />} sx={{ fontSize: "min(3vw,14px)" }} variant="contained" size="medium" onClick={() => router.push("/rating/docs")}>
