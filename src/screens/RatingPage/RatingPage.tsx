@@ -24,7 +24,7 @@ import { setRating as setRatingRedux } from "@/store/ratingSlice";
   data: [{ criteria: 'Первый', 'Крутой': 5, 'Классный': 1}, { criteria: 'Второй', 'Крутой': 0, 'Классный': 2}]
   keys: ['Крутой', 'Классный'] 
  */
-function convert(input: NivoDefaultData): NivoDefaultData {
+export function convert(input: NivoDefaultData): NivoDefaultData {
   const { keys: studentNames, data: criteriaData } = input;
   // Извлекаем названия критериев из исходного массива data
   const criteriaKeys: string[] = criteriaData.map((item) => item.criteria);

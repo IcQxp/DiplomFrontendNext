@@ -1,5 +1,5 @@
-import "./global.scss"
-import { ReduxToolkitProvider } from "./provider"
+import "../(main-layout)/(main)/global.scss";
+import { ReduxToolkitProvider } from "../provider"
 
 export const metadata = {
   title: 'Create Next App',
@@ -16,6 +16,7 @@ export default async function RootLayout({
       <html lang="ru">
         <body>
           <main>
+            <p>ТЕСТ</p>
             {children}
           </main>
         </body>
