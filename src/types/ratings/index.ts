@@ -3,13 +3,6 @@ export interface RatingWithCriteria {
   criteriaIDs: number[]
 }
 
-export interface Criterion {
-  criteriaId: number;
-  name: string;
-  description: string;
-  maxScore: number;
-}
-
 export interface RatingResponse {
   data: DataEntry[];
   keys: KeyEntry[];
