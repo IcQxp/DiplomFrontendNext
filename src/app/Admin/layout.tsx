@@ -16,7 +16,6 @@ export default async function RootLayout({
       <html lang="ru">
         <body>
           <main>
-            <p>ТЕСТ</p>
             {children}
           </main>
         </body>

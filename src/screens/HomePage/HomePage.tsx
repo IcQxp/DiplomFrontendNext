@@ -8,33 +8,23 @@ import { BarChart } from "@mui/icons-material"
 import { Loading } from "@/components/Loading/Loading";
 import { getAllCritea, getTopRatingWithCriteriaArray } from "@/api";
 import { News } from "@/components/News/News";
-import { Criterion } from "@/types";
+import { Criterion, RatingResponse } from "@/types";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { StudentTopNote } from "@/components/StudentTopNote/StudentTopNote";
 
-
-interface DataItem {
-  criteria: string; // Название критерия
-  [key: string]: number | string; // Динамические ключи (имена студентов) с числовыми значениями
-}
-
-export interface ChartResponse {
-  keys: Array<{ [key: string]: string }>; // Массив объектов с ключами-идентификаторами пользователей
-  data: DataItem[]; // Массив объектов с данными
-}
-
- const HomePage: FC = () => {
+const HomePage: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
-  const [rating, setRating] = useState<ChartResponse>();
+  const [rating, setRating] = useState<RatingResponse>();
 
 
   useEffect(() => {
     const FD = async () => {
       try {
-        // const criteriaResponse: Criterion[] = (await getAllCritea()).data;
-        // const response = await getTopRatingWithCriteriaArray({ count: 3, criteriaIDs: criteriaResponse.map(item => item.criteriaId) });
-        // setRating(response.data);
+        const criteriaResponse: Criterion[] = (await getAllCritea()).data;
+        const response = await getTopRatingWithCriteriaArray({ count: 3, criteriaIDs: criteriaResponse.map(item => item.criteriaId) });
+        setRating(response.data);
       }
       catch (error) {
         console.warn("Ошибка при получении данных:", error);
@@ -88,14 +78,7 @@ export interface ChartResponse {
           <Loading size={20} type="rating-3" />
         ) : sortedStudents.length > 0 ? (
           sortedStudents.map(({ name, totalScore, id }, index) => (
-            <Link href={`/profile/${id}`} key={name} className={styles.link}>
-              <h2 style={{ margin: 0, color: index === 0 ? "#ff9800" : "#333" }}>
-                #{index + 1} {name}
-              </h2>
-              <p style={{ margin: "5px 0", fontSize: "14px", color: "#555" }}>
-                Общее кол-во баллов: <strong>{totalScore}</strong>
-              </p>
-            </Link>
+            <StudentTopNote name={name} totalScore={totalScore} id={id} index={index} key={name} />
           ))
         ) : (
           <div>ПУСТО</div>

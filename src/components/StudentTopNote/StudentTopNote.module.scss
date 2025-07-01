@@ -1,0 +1,22 @@
+.link {
+  padding: 15px;
+  margin-left: 30px;
+
+  width: 100%;
+  max-width: calc(100% - 60px);
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+
+  transition: all 0.3s ease;
+
+  text-decoration: none;
+  color: #333;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+}
