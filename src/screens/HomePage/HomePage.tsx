@@ -7,10 +7,9 @@ import styles from "./HomePage.module.scss"
 import { BarChart } from "@mui/icons-material"
 import { Loading } from "@/components/Loading/Loading";
 import { getAllCritea, getTopRatingWithCriteriaArray } from "@/api";
-import { News } from "@/components/News/News";
+import { NewsList } from "@/components/News/News";
 import { Criterion, RatingResponse } from "@/types";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { StudentTopNote } from "@/components/StudentTopNote/StudentTopNote";
 
 const HomePage: FC = () => {
@@ -87,7 +86,7 @@ const HomePage: FC = () => {
       <Button startIcon={<BarChart />} variant="contained" size="medium" onClick={() => { router.push("/rating") }} sx={{ margin: "20px 40px" }}>
         Перейти к рейтингу
       </Button>
-      <News />
+      <NewsList />
     </div>
   )
 }

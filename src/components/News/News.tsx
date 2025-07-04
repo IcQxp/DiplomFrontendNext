@@ -1,6 +1,14 @@
 import styles from "./News.module.scss";
 
-const newsData = [
+interface NewsPost {
+id: number;
+title: string;
+description: string;
+date: string;
+imageUrl: string;
+}
+
+const newsData: NewsPost[] = [
   {
     id: 1,
     title: "Новая программа магистратуры",
@@ -35,19 +43,19 @@ const newsData = [
   },
 ];
 
-export const News = () => {
+export const NewsList = () => {
   return (
-    <div id="news" className={styles.newsContainer}>
-      <h2 className={styles.title}>Последние новости университета</h2>
-      <div className={styles.newsList}>
+    <div id="news" className={styles.news}>
+      <h2 className={styles.news__title}>Последние новости университета</h2>
+      <div className={styles.news__list}>
         {newsData.map((item) => (
-          <div key={item.id} className={styles.newsItem}>
-            <img src={item.imageUrl} alt={item.title} className={styles.image} />
-            <div className={styles.content}>
-              <h3 className={styles.newsTitle}>{item.title}</h3>
-              <p className={styles.description}>{item.description}</p>
-              <div className={styles.meta}>
-                <span className={styles.date}>{item.date}</span>
+          <div key={item.id} className={styles['news-item']}>
+            <img src={item.imageUrl} alt={item.title} className={styles['news-item__image']} />
+            <div className={styles['news-item__content']}>
+              <h3 className={styles['news-item__title']}>{item.title}</h3>
+              <p className={styles['news-item__description']}>{item.description}</p>
+              <div className={styles['news-item__meta']}>
+                <span>{item.date}</span>
               </div>
             </div>
           </div>
