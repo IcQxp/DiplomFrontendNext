@@ -1,0 +1,13 @@
+.chart {
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &__container {
+    min-width: 1500px;
+    height: 700px;
+  }
+}

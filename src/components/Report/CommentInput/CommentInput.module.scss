@@ -1,0 +1,19 @@
+.commentInput {
+  margin-bottom: 20px;
+
+  label {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+
+  textarea {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: 14px;
+    display: block;
+  }
+}
