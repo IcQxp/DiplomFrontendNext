@@ -1,4 +1,4 @@
-import "./(main-layout)/(main)/global.scss"
+import "@/app/global.scss"
 import { ReduxToolkitProvider } from "./provider"
 
 export const metadata = {
@@ -11,11 +11,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <ReduxToolkitProvider>
       <html lang="ru">
-        <body style={{minHeight:"100vh"}}>
-            {children}
+        <body style={{ minHeight: "100vh" }}>
+          {children}
         </body>
       </html>
     </ReduxToolkitProvider>

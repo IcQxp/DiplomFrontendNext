@@ -1,5 +1,5 @@
 import { Header } from "@/components/Header/Header"
-import "./global.scss"
+import "@/app/global.scss"
 import { Footer } from "@/components/Footer/Footer"
 
 
