@@ -330,7 +330,7 @@ export const AdminPage = () => {
                         : [];
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%",marginTop:"60px" }} >
       {/* Вкладки */}
       <Tabs
         value={tabValue}
