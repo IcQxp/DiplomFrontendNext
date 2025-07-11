@@ -58,7 +58,7 @@ const updateDocument = (token: string, docID: number, formData: FormData) =>
 const downloadDocument = (token: string, formData: FormData) =>
   axiosDocumentRequest("post", endpoints.downloadDocument, token, formData);
 
-const getAllDocuments = (token: string) =>
+const getAllDocuments = (token?: string) =>
   axiosRequest("get", endpoints.getAllDocuments, token);
 
 const getUserRating = (userID: number) =>

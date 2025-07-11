@@ -1,20 +1,22 @@
 import React from "react";
 import { DataTabContainer } from "../DataTabContainer";
-import { useDisciplines } from "../../../hooks/admin/useDisciplines";
+import { useDataLoader } from "@/hooks/admin/useDataLoader";
+import { Discipline } from "@/types";
+import { getAllDisciplines } from "@/api";
 
 const DisciplineTab = () => {
-  const { disciplines, isLoading, loadDisciplines, updateDiscipline, deleteDiscipline } = useDisciplines();
+  const { data, isLoading, loadData, updateItem, deleteItem } = useDataLoader<Discipline>(getAllDisciplines,'disciplineId');
 
   return (
     <DataTabContainer
       title="Дисциплины"
       columns={["disciplineId", "name"]}
-      data={disciplines}
+      data={data}
       isLoading={isLoading}
-      onLoad={loadDisciplines}
+      onLoad={loadData}
       onSearch={() => {}}
-      onEdit={updateDiscipline}
-      onDelete={deleteDiscipline}
+      onEdit={updateItem}
+      onDelete={deleteItem}
     />
   );
 };

@@ -1,21 +1,23 @@
 // CriterionTab.tsx
 import React from "react";
 import { DataTabContainer } from "../DataTabContainer";
-import { useCriteria } from "../../../hooks/admin/useCriteria";
+import { Criterion } from "@/types";
+import { useDataLoader } from "@/hooks/admin/useDataLoader";
+import { getAllCritea } from "@/api";
 
 const CriterionTab = () => {
-  const { criteria, isLoading, loadCriteria, updateCriterion, deleteCriterion } = useCriteria();
+  const { data, isLoading, loadData, updateItem, deleteItem } = useDataLoader<Criterion>(getAllCritea,'criteriaId');
 
   return (
     <DataTabContainer
       title="Критерии"
       columns={["criteriaId", "name"]}
-      data={criteria}
+      data={data}
       isLoading={isLoading}
-      onLoad={loadCriteria}
+      onLoad={loadData}
       onSearch={(query) => {}}
-      onEdit={updateCriterion}
-      onDelete={deleteCriterion}
+      onEdit={updateItem}
+      onDelete={deleteItem}
     />
   );
 };

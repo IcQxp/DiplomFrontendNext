@@ -1,9 +1,11 @@
 import React from "react";
 import { DataTabContainer } from "../DataTabContainer";
-import { useEmployees } from "../../../hooks/admin/useEmployees";
+import { useDataLoader } from "@/hooks/admin/useDataLoader";
+import { Employee } from "@/types";
+import { getAllEmployees } from "@/api";
 
 const EmployeeTab = () => {
-  const { data, isLoading, loadData, updateData, deleteData } = useEmployees();
+  const { data, isLoading, loadData, updateItem, deleteItem } = useDataLoader<Employee>(getAllEmployees, 'employeeId');
 
   return (
     <DataTabContainer
@@ -12,9 +14,9 @@ const EmployeeTab = () => {
       data={data}
       isLoading={isLoading}
       onLoad={loadData}
-      onSearch={() => {}}
-      onEdit={updateData}
-      onDelete={deleteData}
+      onSearch={() => { }}
+      onEdit={updateItem}
+      onDelete={deleteItem}
     />
   );
 };

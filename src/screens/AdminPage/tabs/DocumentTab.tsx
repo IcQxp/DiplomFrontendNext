@@ -1,10 +1,12 @@
 // tabs/DocumentTab.tsx
 import React from "react";
 import { DataTabContainer } from "../DataTabContainer";
-import { useDocuments } from "../../../hooks/admin/useDocuments";
+import { Document } from "@/types";
+import { getAllDocuments } from "@/api";
+import { useDataLoader } from "@/hooks/admin/useDataLoader";
 
 const DocumentTab = () => {
-  const { data, isLoading, loadData, updateData, deleteData } = useDocuments();
+  const { data, isLoading, loadData, updateItem, deleteItem } = useDataLoader<Document>((token?:string)=>getAllDocuments(token),'documentId');
 
   return (
     <DataTabContainer
@@ -14,8 +16,8 @@ const DocumentTab = () => {
       isLoading={isLoading}
       onLoad={loadData}
       onSearch={() => {}}
-      onEdit={updateData}
-      onDelete={deleteData}
+      onEdit={updateItem}
+      onDelete={deleteItem}
     />
   );
 };
