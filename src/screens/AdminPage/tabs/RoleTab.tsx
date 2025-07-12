@@ -1,9 +1,11 @@
 import React from "react";
 import { DataTabContainer } from "../DataTabContainer";
-import { useRoles } from "../../../hooks/admin/useRoles";
+import { useDataLoader } from "@/hooks/admin/useDataLoader";
+import { Role } from "@/types";
+import { getAllRoles } from "@/api";
 
 const RoleTab = () => {
-  const { data, isLoading, loadData, updateData, deleteData } = useRoles();
+  const { data, isLoading, loadData, updateItem, deleteItem } = useDataLoader<Role>(getAllRoles,'roleId');
 
   return (
     <DataTabContainer
@@ -13,8 +15,8 @@ const RoleTab = () => {
       isLoading={isLoading}
       onLoad={loadData}
       onSearch={() => {}}
-      onEdit={updateData}
-      onDelete={deleteData}
+      onEdit={updateItem}
+      onDelete={deleteItem}
     />
   );
 };

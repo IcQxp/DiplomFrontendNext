@@ -1,10 +1,12 @@
 // tabs/StudentTab.tsx
 import React from "react";
 import { DataTabContainer } from "../DataTabContainer";
-import { useStudents } from "../../../hooks/admin/useStudents";
+import { useDataLoader } from "@/hooks/admin/useDataLoader";
+import { Student } from "@/types";
+import { getAllStudents } from "@/api";
 
 const StudentTab = () => {
-  const { data, isLoading, loadData, updateData, deleteData } = useStudents();
+  const { data, isLoading, loadData, updateItem, deleteItem} = useDataLoader<Student>(getAllStudents,'studentId');
 
   return (
     <DataTabContainer
@@ -14,8 +16,8 @@ const StudentTab = () => {
       isLoading={isLoading}
       onLoad={loadData}
       onSearch={() => {}}
-      onEdit={updateData}
-      onDelete={deleteData}
+      onEdit={updateItem}
+      onDelete={deleteItem}
     />
   );
 };

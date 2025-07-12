@@ -1,9 +1,11 @@
 import React from "react";
 import { DataTabContainer } from "../DataTabContainer";
-import { useGroups } from "../../../hooks/admin/useGroups";
+import { useDataLoader } from "@/hooks/admin/useDataLoader";
+import { Group } from "@/types";
+import { getAllGroups } from "@/api";
 
 const GroupTab = () => {
-  const { data, isLoading, loadData, updateData, deleteData } = useGroups();
+  const { data, isLoading, loadData, updateItem, deleteItem } = useDataLoader<Group>(getAllGroups,'groupId');
 
   return (
     <DataTabContainer
@@ -13,8 +15,8 @@ const GroupTab = () => {
       isLoading={isLoading}
       onLoad={loadData}
       onSearch={() => {}}
-      onEdit={updateData}
-      onDelete={deleteData}
+      onEdit={updateItem}
+      onDelete={deleteItem}
     />
   );
 };

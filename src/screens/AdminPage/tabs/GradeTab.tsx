@@ -1,9 +1,11 @@
 import React from "react";
 import { DataTabContainer } from "../DataTabContainer";
-import { useGrades } from "../../../hooks/admin/useGrades";
+import { useDataLoader } from "@/hooks/admin/useDataLoader";
+import { Grade } from "@/types";
+import { getAllGrades } from "@/api";
 
 const GradeTab = () => {
-  const { data, isLoading, loadData, updateData, deleteData } = useGrades();
+  const { data, isLoading, loadData, updateItem, deleteItem } = useDataLoader<Grade>(getAllGrades,'gradeId');
 
   return (
     <DataTabContainer
@@ -13,8 +15,8 @@ const GradeTab = () => {
       isLoading={isLoading}
       onLoad={loadData}
       onSearch={() => {}}
-      onEdit={updateData}
-      onDelete={deleteData}
+      onEdit={updateItem}
+      onDelete={deleteItem}
     />
   );
 };

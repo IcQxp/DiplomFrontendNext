@@ -4,7 +4,7 @@ import { useState } from "react";
 type IdKey<T> = keyof T;
 
 export const useDataLoader = <T extends Record<string, any>>(
- fetchFn: (token?:string) => Promise<AxiosResponse<T[]>>,
+  fetchFn: (token?: string) => Promise<AxiosResponse<T[]>>,
   idKey: IdKey<T> = 'id' as IdKey<T>,
   updateFn?: (id: number | string, data: Partial<Omit<T, typeof idKey>>) => Promise<void>,
   deleteFn?: (id: number | string) => Promise<void>
