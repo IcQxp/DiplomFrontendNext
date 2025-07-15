@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { endpoints } from "./config";
-import { DocumentStatusUpdateModel, RatingWithCriteria, UserDataPaylod } from "@/types";
+import { Criterion, Discipline, Document, DocumentStatusUpdateModel, DocumentType, Employee, Grade, Group, Lesson, RatingWithCriteria, Role, Student, UserDataPaylod } from "@/types";
 
 axios.interceptors.request.use(config => {
   config.headers['bypass-tunnel-reminder'] = '1';
@@ -8,7 +8,7 @@ axios.interceptors.request.use(config => {
 });
 
 
-async function axiosRequest(method: 'get' | 'post' | 'put' | 'delete', url: string, token?: string, data?: any)  {
+async function axiosRequest<T>(method: 'get' | 'post' | 'put' | 'delete', url: string, token?: string, data?: any): Promise<AxiosResponse<T>>  {
   try {
     const headers = {
       // 'bypass-tunnel-reminder':'1',
@@ -16,7 +16,7 @@ async function axiosRequest(method: 'get' | 'post' | 'put' | 'delete', url: stri
       ...(token && { Authorization: `Bearer ${token}` }),
     };
 
-    const response = await axios({ method, url, headers, data });
+    const response: AxiosResponse<T> = await axios({ method, url, headers, data });
     return response;
   } catch (error) {
     console.error("Ошибка при выполнении запроса:", error);
@@ -59,7 +59,7 @@ const downloadDocument = (token: string, formData: FormData) =>
   axiosDocumentRequest("post", endpoints.downloadDocument, token, formData);
 
 const getAllDocuments = (token?: string) =>
-  axiosRequest("get", endpoints.getAllDocuments, token);
+  axiosRequest<Document[]>("get", endpoints.getAllDocuments, token);
 
 const getUserRating = (userID: number) =>
   axiosRequest("get", endpoints.getUserRating(userID));
@@ -68,7 +68,7 @@ const getPostUserRating = (data: number[]) =>
   axiosRequest("post", endpoints.getUsersRating, "", data);
 
 const getAllCritea = () =>
-  axiosRequest("get", endpoints.getAllCritea);
+  axiosRequest<Criterion[]>("get", endpoints.getAllCritea);
 
 const getUserByID = (userID: string) =>
   axiosRequest("get", endpoints.getUserByID(userID));
@@ -83,15 +83,15 @@ const getTopRatingWithCriteriaArray = (data: RatingWithCriteria) =>
 const getUserSrBallById = (studentId: number) =>
   axiosRequest("get", endpoints.getUserSrBallById(studentId.toString()));
 
-const getAllDisciplines = () => axiosRequest("get", endpoints.getAllDisciplines);
-const getAllStudents = () => axiosRequest("get", endpoints.getAllStudents);
-const getAlldocumentTypes = () => axiosRequest("get", endpoints.getAllDocumentTypes);
-const getAllEmployees = () => axiosRequest("get", endpoints.getAllEmployees);
-const getAllGrades = () => axiosRequest("get", endpoints.getAllGrades);
-const getAllGroups = () => axiosRequest("get", endpoints.getAllGroups);
-const getAllLessons = () => axiosRequest("get", endpoints.getAllLessons);
-const getAllRoles = () => axiosRequest("get", endpoints.getAllRoles);
-const getAllStatuses = () => axiosRequest("get", endpoints.getAllStatuses);
+const getAllDisciplines = () => axiosRequest<Discipline[]>("get", endpoints.getAllDisciplines);
+const getAllStudents = () => axiosRequest<Student[]>("get", endpoints.getAllStudents);
+const getAlldocumentTypes = () => axiosRequest<DocumentType[]>("get", endpoints.getAllDocumentTypes);
+const getAllEmployees = () => axiosRequest<Employee[]>("get", endpoints.getAllEmployees);
+const getAllGrades = () => axiosRequest<Grade[]>("get", endpoints.getAllGrades);
+const getAllGroups = () => axiosRequest<Group[]>("get", endpoints.getAllGroups);
+const getAllLessons = () => axiosRequest<Lesson[]>("get", endpoints.getAllLessons);
+const getAllRoles = () => axiosRequest<Role[]>("get", endpoints.getAllRoles);
+const getAllStatuses = () => axiosRequest<Student[]>("get", endpoints.getAllStatuses);
 const getUserDocumentByID = (docId: number) =>
   axiosRequest("get", endpoints.getUserDocumentByID(docId));
 const updateDocumentStatus = (documentId: number, model: DocumentStatusUpdateModel) =>

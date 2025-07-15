@@ -3,6 +3,14 @@ import { useState } from "react";
 
 type IdKey<T> = keyof T;
 
+/**
+ * 
+ * @param fetchFn функция получения всех сущностей определенного класса
+ * @param idKey ID сущности класса
+ * @param updateFn функция для обновления сущности
+ * @param deleteFn фукнция для удаления сущности
+ * @returns 
+ */
 export const useDataLoader = <T extends Record<string, any>>(
   fetchFn: (token?: string) => Promise<AxiosResponse<T[]>>,
   idKey: IdKey<T> = 'id' as IdKey<T>,

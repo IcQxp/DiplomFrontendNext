@@ -15,17 +15,26 @@ import {
   Button,
 } from "@mui/material";
 
-const DataTable = ({
+interface DataTableProps<T extends Record<string, any>>  {
+  data: T[];
+  columns: (keyof T)[];
+  onEdit: (id: number, updatedData: T) => void;
+  onDelete: (id: number) => void;
+};
+
+const DataTable  = <T extends Record<string, any>>({
   data,
   columns,
   onEdit,
   onDelete,
-}: {
-  data: any[];
-  columns: string[];
-  onEdit: (id: number, updatedData: any) => void;
-  onDelete: (id: number) => void;
-}) => {
+}
+// :{
+//   data: any[];
+//   columns: string[];
+//   onEdit: (id: number, updatedData: any) => void;
+//   onDelete: (id: number) => void;
+// }
+:DataTableProps<T>) => {
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [editingRow, setEditingRow] = useState<any>(null);
 
@@ -48,7 +57,7 @@ const DataTable = ({
           <TableHead>
             <TableRow>
               {columns.map((column, index) => (
-                <TableCell key={index}>{column}</TableCell>
+                <TableCell key={index}>{column.toString()}</TableCell>
               ))}
               <TableCell>Действия</TableCell>
             </TableRow>
@@ -91,7 +100,7 @@ const DataTable = ({
           {columns.map((column, index) => (
             <TextField
               key={index}
-              label={column}
+              label={column.toString()}
               fullWidth
               margin="dense"
               value={editingRow?.[column] || ""}
