@@ -37,7 +37,8 @@ export const DataTabContainer = <T extends { [key: string]: any }>({
       ) : (
         <DataTable
           data={data}
-          columns={columns as string[]}
+          columns={columns as (keyof T)[]}
+          // columns={columns as string[]}
           onEdit={onEdit}
           onDelete={onDelete}
         />

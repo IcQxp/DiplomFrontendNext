@@ -5,7 +5,7 @@ import { TabPanel } from "./TabPanel";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useRouter } from "next/navigation";
-import { TabConfig, tabConfigs } from "./config";
+import { configEntity, TabConfig, tabConfigs } from "./config";
 
 export const AdminPage = () => {
   const router = useRouter();
@@ -32,7 +32,7 @@ export const AdminPage = () => {
       </Tabs>
 
       <Box sx={{ p: 3 }}>
-        {tabConfigs.map((tab: TabConfig<any>) => {
+        {tabConfigs.map((tab: configEntity) => {
           const TabComponent = tab.component;
           return (
             <TabPanel key={tab.index} value={tabValue} index={tab.index}>

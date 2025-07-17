@@ -15,30 +15,24 @@ import {
   Button,
 } from "@mui/material";
 
-interface DataTableProps<T extends Record<string, any>>  {
+interface DataTableProps<T extends Record<string, any>> {
   data: T[];
   columns: (keyof T)[];
   onEdit: (id: number, updatedData: T) => void;
   onDelete: (id: number) => void;
 };
 
-const DataTable  = <T extends Record<string, any>>({
+const DataTable = <T extends Record<string, any>>({
   data,
   columns,
   onEdit,
   onDelete,
 }
-// :{
-//   data: any[];
-//   columns: string[];
-//   onEdit: (id: number, updatedData: any) => void;
-//   onDelete: (id: number) => void;
-// }
-:DataTableProps<T>) => {
+  : DataTableProps<T>) => {
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [editingRow, setEditingRow] = useState<any>(null);
+  const [editingRow, setEditingRow] = useState<T | null>(null);
 
-  const handleEditClick = (row: any) => {
+  const handleEditClick = (row: T) => {
     setEditingRow(row);
     setOpenEditDialog(true);
   };
@@ -63,7 +57,7 @@ const DataTable  = <T extends Record<string, any>>({
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row, rowIndex) => (
+            {data.map((row: T, rowIndex) => (
               <TableRow key={rowIndex}>
                 {columns.map((column, colIndex) => (
                   <TableCell key={colIndex}>{row[column]}</TableCell>
@@ -105,7 +99,7 @@ const DataTable  = <T extends Record<string, any>>({
               margin="dense"
               value={editingRow?.[column] || ""}
               onChange={(e) =>
-                setEditingRow({ ...editingRow, [column]: e.target.value })
+                setEditingRow({ ...editingRow, [column]: e.target.value } as T)
               }
             />
           ))}
